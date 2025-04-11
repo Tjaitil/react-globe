@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "[typescript, ts, json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "eslint.useFlatConfig": true,
+}
