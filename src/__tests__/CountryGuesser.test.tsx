@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import CountryGuesser from '../CountryGuesser';
+import CountryGuesser from '@/components/Games/CountryGuesserGame/CountryGuesserControls';
 import { describe, test, expect, beforeEach } from 'vitest';
-import { WorldCountryEntry } from '../types/WorldCountryDataset';
-import worldcountryDataset from '../datasets/WorldCountryDataset.json';
+import type { WorldCountryEntry } from '@/types/WorldCountryDataset';
+import worldcountryDataset from '@/datasets/WorldCountryDataset.json';
 
 const mockCountries = ['Norway', 'Sweden', 'Denmark'];
 const mockedCountryPolygons = worldcountryDataset.features
