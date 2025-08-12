@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ChartBarIcon } from '@heroicons/react/24/outline';
 import type { ChartConfig } from '@/types/ChartConfig';
-import { FastFoodChainsAlongRoads } from './Norway/FastFoodChainsAlongRoads';
 import { CountyPopulationDevelopment } from './Norway/CountyPopulationDevelopment';
 import { Card } from '../BaseCard';
 
@@ -11,19 +10,13 @@ const charts: {
   title: ChartConfig['title'];
   description: ChartConfig['description'];
 }[] = [
-  {
-    component: FastFoodChainsAlongRoads,
-    id: 1,
-    title: 'Fast Food Chains in Norway',
-    description: 'Explore the distribution of fast food chains across Norway',
-  },
-  {
-    component: CountyPopulationDevelopment,
-    id: 2,
-    title: 'County Population Development in Norway',
-    description: 'Explore the population development across Norwegian counties',
-  },
-];
+    {
+      component: CountyPopulationDevelopment,
+      id: 2,
+      title: 'County Population Development in Norway',
+      description: 'Explore the population development across Norwegian counties',
+    },
+  ];
 
 export const ChartOverview = () => {
   const [selectedChart, setSelectedChart] = useState<number | null>(null);
