@@ -1,6 +1,6 @@
 import { Select, Button } from '@headlessui/react';
 import { useEffect, useState } from 'react';
-import { WorldCountryEntry } from './types/WorldCountryDataset';
+import type { WorldCountryEntry } from '@/types/WorldCountryDataset';
 
 function getRandomCountry(countries: string[], guessedCountries: string[]) {
   const filteredCountries = countries.filter(

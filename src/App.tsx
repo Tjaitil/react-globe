@@ -1,87 +1,63 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useState } from 'react';
+import 'leaflet/dist/leaflet.css';
 import './App.css';
-import Globe, { GlobeMethods } from 'react-globe.gl';
-import worldCountryDataset from './datasets/WorldCountryDataset.json';
-import type {
-  WorldCountryEntry,
-  WorldCountryDataset,
-} from './types/WorldCountryDataset';
-import CountryGuesser from './CountryGuesser';
+import { ChartOverview, GamesOverview } from './components';
+import { Button } from '@headlessui/react';
+import { RiArrowLeftLine, RiMapPin2Line, RiGameLine } from 'react-icons/ri';
+import { getButtonClasses } from './utils/theme';
 
 function App() {
-  const [dataset, setDataSet] = useState<WorldCountryDataset>({
-    type: 'FeatureCollection',
-    features: [],
-  });
-  const [countryNames, setCountryNames] = useState<string[]>([]);
-  const globeEl = useRef<GlobeMethods | undefined>(undefined);
-  const [hoveredPolygon, setHoveredPolygon] = useState<object | null>();
-  const [clickedPolygon, setClickedPolygon] =
-    useState<WorldCountryEntry | null>(null);
-
-  const handlePolygonClick = (polygon: object | null) => {
-    if (!polygon) {
-      return;
-    }
-
-    let obj = polygon as WorldCountryEntry;
-
-    setClickedPolygon(obj);
-  };
-
-  const onPolygonHover = useCallback((polygon: object | null) => {
-    setHoveredPolygon(polygon);
-  }, []);
-
-  useEffect(() => {
-    setDataSet(worldCountryDataset);
-
-    setCountryNames(
-      worldCountryDataset.features
-        .map(d => d.properties.NAME)
-        .filter((name: string) => name !== 'Antarctica'),
-    );
-  }, []);
+  const [currentMap, setCurrentMap] = useState<'map-charts' | 'games' | null>(
+    null,
+  );
 
   return (
-    <div className="App">
-      <div className="absolute top-5 left-5 z-10 h-76 w-64 rounded-lg border-2 border-gray-500 bg-gray-800 p-2 text-white">
-        {
-          <CountryGuesser
-            countries={countryNames}
-            clickedPolygon={clickedPolygon}
-            resetClickedPolygon={clickedPolygon => setClickedPolygon(null)}
-          />
-        }
-      </div>
-      <Globe
-        ref={globeEl}
-        backgroundImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png"
-        globeImageUrl="//cdn.jsdelivr.net/npm/three-globe@2.42.3/example/img/earth-day.jpg"
-        animateIn={true}
-        polygonsData={dataset.features.filter(
-          d => d.properties.ISO_A2 !== 'AQ',
-        )}
-        polygonAltitude={0.00415}
-        polygonStrokeColor={() => 'black'}
-        polygonSideColor={() => 'black'}
-        polygonCapColor={d =>
-          d === hoveredPolygon ? '#78716c' : 'transparent'
-        }
-        onPolygonHover={onPolygonHover}
-        onPolygonClick={polygon => handlePolygonClick(polygon)}
-        polygonsTransitionDuration={300}
-      />
-
-      <p className="copyright ml-2">
-        Globe component, countries dataset and assets provided by&nbsp;
-        <a
-          href="https://githupb.com/vasturiano/react-globe.gl"
-          className="underline"
-        >
-          React globe-gl
-        </a>
-      </p>
+    <div className="App min-h-screen bg-gray-900 text-white">
+      {currentMap === 'map-charts' ? (
+        <>
+          <Button
+            onClick={() => setCurrentMap(null)}
+            className={getButtonClasses('transparent')}
+          >
+            Home
+          </Button>
+          <ChartOverview />
+        </>
+      ) : currentMap === 'games' ? (
+        <>
+          <Button
+            onClick={() => setCurrentMap(null)}
+            className={getButtonClasses('transparent')}
+          >
+            Home
+          </Button>
+          <GamesOverview />
+        </>
+      ) : (
+        <div className="flex h-screen w-full flex-row items-center justify-center bg-gray-900">
+          <div className="z-[1000] h-76 w-1/5 rounded-lg border-2 border-gray-500 bg-gray-800 p-2 text-white">
+            <div>
+              <h1 className="mb-4 text-3xl text-white">Select mode</h1>
+              <div className="space-y-2">
+                <Button
+                  onClick={() => setCurrentMap('map-charts')}
+                  className={getButtonClasses('primary', 'lg', true, 'gap-3')}
+                >
+                  <RiMapPin2Line className="h-5 w-5" />
+                  Map Charts
+                </Button>
+                <Button
+                  onClick={() => setCurrentMap('games')}
+                  className={getButtonClasses('primary', 'lg', true, 'gap-3')}
+                >
+                  <RiGameLine className="h-5 w-5" />
+                  Games
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
